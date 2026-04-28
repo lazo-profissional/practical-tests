@@ -1,0 +1,82 @@
+name: PR Validation
+
+on:
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  architecture-validation:
+    name: Architecture Validation
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 10
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Check layer dependencies
+      run: |
+        echo "Validating Clean Architecture dependencies..."
+        
+        # Domain should have NO project references
+        DOMAIN_REFS=$(grep -A 5 "ProjectReference" src/GoodHamburger.Domain/GoodHamburger.Domain.csproj || echo "")
+        if [ ! -z "$DOMAIN_REFS" ]; then
+          echo "ERROR: Domain layer has project references"
+          exit 1
+        fi
+        
+        # Application should only reference Domain
+        APP_REFS=$(grep "ProjectReference" src/GoodHamburger.Application/GoodHamburger.Application.csproj)
+        if echo "$APP_REFS" | grep -qv "GoodHamburger.Domain"; then
+          echo "ERROR: Application layer references projects other than Domain"
+          exit 1
+        fi
+        
+        # Infrastructure should only reference Domain
+        INFRA_REFS=$(grep "ProjectReference" src/GoodHamburger.Infrastructure/GoodHamburger.Infrastructure.csproj)
+        if echo "$INFRA_REFS" | grep -qv "GoodHamburger.Domain"; then
+          echo "ERROR: Infrastructure layer references projects other than Domain"
+          exit 1
+        fi
+        
+        # Blazor should have NO project references to backend
+        BLAZOR_REFS=$(grep "ProjectReference" UI/GoodHamburger.Blazor/GoodHamburger.Blazor.csproj || echo "")
+        if [ ! -z "$BLAZOR_REFS" ]; then
+          echo "ERROR: Blazor UI references backend projects"
+          exit 1
+        fi
+        
+        echo "Architecture validation passed."
+
+  test-coverage:
+    name: Test Coverage
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 10
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore GoodHamburger.sln
+
+    - name: Build
+      run: dotnet build GoodHamburger.sln --configuration Release --no-restore
+
+    - name: Run tests with coverage
+      run: dotnet test tests/GoodHamburger.Tests/GoodHamburger.Tests.csproj --configuration Release --no-build --collect:"XPlat Code Coverage" --results-directory ./coverage
+      env:
+        ASPNETCORE_ENVIRONMENT: Development
+
+    - name: Report coverage
+      run: |
+        echo "Coverage report generated at ./coverage"
+        ls -la ./coverage

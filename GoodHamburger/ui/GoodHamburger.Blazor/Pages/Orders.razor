@@ -1,0 +1,158 @@
+@page "/orders"
+@using GoodHamburger.Blazor.Models
+@inject GoodHamburger.Blazor.Services.ApiClient ApiClient
+@implements IDisposable
+
+<h1>Orders</h1>
+
+@if (orders == null)
+{
+    <p>Loading...</p>
+}
+else if (!orders.Any())
+{
+    <div class="text-center py-5">
+        <h1 class="display-1 text-muted">📦</h1>
+        <h3>No orders yet</h3>
+        <p class="text-muted">Create your first order to get started.</p>
+        <a href="/orders/create" class="btn btn-primary">Create Order</a>
+    </div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Items</th>
+                <th>Subtotal</th>
+                <th>Discount</th>
+                <th>Total</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in orders)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@string.Join(", ", order.Items.Select(i => i.Name))</td>
+                    <td>@order.Subtotal.ToString("C")</td>
+                    <td>@order.Discount.ToString("C")</td>
+                    <td><strong>@order.Total.ToString("C")</strong></td>
+                    <td>@order.CreatedAt.ToString("g")</td>
+                    <td>
+                        <a href="/orders/edit/@order.Id" class="btn btn-sm btn-warning me-1">Edit</a>
+                        <button class="btn btn-sm btn-danger" @onclick="() => ConfirmDelete(order.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (deleteId != null)
+{
+    <div class="modal d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Delete</h5>
+                    <button type="button" class="btn-close" @onclick="CancelDelete"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete order <strong>#@deleteId</strong>?</p>
+                    <p class="text-muted small">This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" @onclick="CancelDelete">Cancel</button>
+                    <button class="btn btn-danger" @onclick="ExecuteDelete">Yes, Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (toastMessage != null)
+{
+    <div class="position-fixed bottom-0 end-0 m-3 p-3 rounded text-white @toastClass" style="z-index: 9999; min-width: 250px;">
+        <div class="d-flex justify-content-between align-items-center">
+            <span>@toastMessage</span>
+            <button type="button" class="btn-close btn-close-white" @onclick="HideToast"></button>
+        </div>
+    </div>
+}
+
+@code {
+    private List<OrderModel>? orders;
+    private int? deleteId;
+    private string? toastMessage;
+    private string toastClass = "bg-success";
+    private Timer? toastTimer;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadOrders();
+    }
+
+    private async Task LoadOrders()
+    {
+        try
+        {
+            orders = await ApiClient.GetOrdersAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading orders: {ex.Message}");
+        }
+    }
+
+    private void ConfirmDelete(int id)
+    {
+        deleteId = id;
+    }
+
+    private void CancelDelete()
+    {
+        deleteId = null;
+    }
+
+    private async Task ExecuteDelete()
+    {
+        if (deleteId == null) return;
+
+        var idToDelete = deleteId.Value;
+        deleteId = null;
+
+        try
+        {
+            await ApiClient.DeleteOrderAsync(idToDelete);
+            ShowToast($"Order #{idToDelete} deleted!", "bg-success");
+            await LoadOrders();
+        }
+        catch (Exception ex)
+        {
+            ShowToast($"Error: {ex.Message}", "bg-danger");
+        }
+    }
+
+    private void ShowToast(string message, string cssClass)
+    {
+        toastMessage = message;
+        toastClass = cssClass;
+        toastTimer?.Dispose();
+        toastTimer = new Timer(_ => { HideToast(); InvokeAsync(StateHasChanged); }, null, 3000, Timeout.Infinite);
+    }
+
+    private void HideToast()
+    {
+        toastMessage = null;
+        toastTimer?.Dispose();
+    }
+
+    public void Dispose()
+    {
+        toastTimer?.Dispose();
+    }
+}

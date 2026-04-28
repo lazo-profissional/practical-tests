@@ -1,0 +1,119 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 10
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore GoodHamburger.sln
+
+    - name: Build solution
+      run: dotnet build GoodHamburger.sln --configuration Release --no-restore
+      env:
+        DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+    - name: Run unit tests
+      run: dotnet test tests/GoodHamburger.Tests/GoodHamburger.Tests.csproj --configuration Release --no-build --verbosity normal
+      env:
+        DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+    - name: Run integration tests
+      run: dotnet test tests/GoodHamburger.Tests/GoodHamburger.Tests.csproj --configuration Release --no-build --verbosity normal --filter "FullyQualifiedName~Integration"
+      env:
+        DOTNET_CLI_TELEMETRY_OPTOUT: 1
+        ASPNETCORE_ENVIRONMENT: Development
+
+  validate-ef-migrations:
+    name: Validate EF Migrations
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 10
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Install EF Core tools
+      run: dotnet tool install --global dotnet-ef
+
+    - name: Restore dependencies
+      run: dotnet restore GoodHamburger.sln
+
+    - name: Build solution
+      run: dotnet build GoodHamburger.sln --configuration Release --no-restore
+
+    - name: Verify EF model
+      run: |
+        dotnet ef dbcontext list --project src/GoodHamburger.Infrastructure/GoodHamburger.Infrastructure.csproj --startup-project src/GoodHamburger.API/GoodHamburger.API.csproj -- --environment Development
+      env:
+        DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 10
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore GoodHamburger.sln
+
+    - name: Build with warnings as errors
+      run: dotnet build GoodHamburger.sln --configuration Release --no-restore /warnaserror
+      env:
+        DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+    - name: Check for forbidden patterns
+      run: |
+        echo "Checking for forbidden patterns..."
+        
+        # Check for AutoMapper
+        if grep -r "AutoMapper" --include="*.csproj" --include="*.cs" . ; then
+          echo "ERROR: AutoMapper found - forbidden pattern"
+          exit 1
+        fi
+        
+        # Check for FluentValidation
+        if grep -r "FluentValidation" --include="*.csproj" --include="*.cs" . ; then
+          echo "ERROR: FluentValidation found - forbidden pattern"
+          exit 1
+        fi
+        
+        # Check for Specification pattern
+        if grep -r "ISpecification\|Specification<" --include="*.cs" . ; then
+          echo "ERROR: Specification pattern found - forbidden pattern"
+          exit 1
+        fi
+        
+        # Check for Result pattern
+        if grep -r "Result<\|Result<T>" --include="*.cs" . ; then
+          echo "ERROR: Result pattern found - forbidden pattern"
+          exit 1
+        fi
+        
+        echo "All pattern checks passed."

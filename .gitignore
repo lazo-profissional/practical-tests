@@ -179,6 +179,13 @@ coverage*.info
 # Visual Studio code coverage results
 *.coverage
 *.coveragexml
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.db
+*.sqlite3
 
 # NCrunch
 _NCrunch_*
@@ -414,6 +421,16 @@ FodyWeavers.xsd
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/*.code-snippets
+!.vscode/*.code-snippets
+!*.code-workspace
+!*bin/
+!*obj/
+!*node_modules/
+!*dist/
+!*.env
+
+# Built Visual Studio Code Extensions
+*.vsix
 
 # Local History for Visual Studio Code
 .history/

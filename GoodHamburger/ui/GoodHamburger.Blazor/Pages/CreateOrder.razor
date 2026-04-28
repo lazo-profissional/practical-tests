@@ -1,0 +1,210 @@
+@page "/orders/create"
+@using GoodHamburger.Blazor.Models
+@inject GoodHamburger.Blazor.Services.ApiClient ApiClient
+@inject NavigationManager Navigation
+@implements IDisposable
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Create Order</h1>
+    <a href="/orders" class="btn btn-outline-secondary">← Back to Orders</a>
+</div>
+
+@if (menuItems == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-8">
+            <h4>Select Items</h4>
+            <p class="text-muted">Max: 1 Sandwich, 1 Side, 1 Drink</p>
+            
+            <h5>Sandwiches</h5>
+            @foreach (var item in menuItems.Where(m => m.Type == "Sandwich"))
+            {
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" 
+                           id="sandwich-@item.Id" 
+                           @onchange="e => ToggleItem(item.Id, item.Type, (bool)(e.Value ?? false))" />
+                    <label class="form-check-label" for="sandwich-@item.Id">
+                        @item.Name - @item.Price.ToString("C")
+                    </label>
+                </div>
+            }
+
+            <h5 class="mt-3">Sides</h5>
+            @foreach (var item in menuItems.Where(m => m.Type == "Side"))
+            {
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" 
+                           id="side-@item.Id" 
+                           @onchange="e => ToggleItem(item.Id, item.Type, (bool)(e.Value ?? false))" />
+                    <label class="form-check-label" for="side-@item.Id">
+                        @item.Name - @item.Price.ToString("C")
+                    </label>
+                </div>
+            }
+
+            <h5 class="mt-3">Drinks</h5>
+            @foreach (var item in menuItems.Where(m => m.Type == "Drink"))
+            {
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" 
+                           id="drink-@item.Id" 
+                           @onchange="e => ToggleItem(item.Id, item.Type, (bool)(e.Value ?? false))" />
+                    <label class="form-check-label" for="drink-@item.Id">
+                        @item.Name - @item.Price.ToString("C")
+                    </label>
+                </div>
+            }
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header fw-bold">Order Summary</div>
+                <div class="card-body">
+                    <p><strong>Items:</strong></p>
+                    @if (selectedIds.Count == 0)
+                    {
+                        <p class="text-muted">No items selected</p>
+                    }
+                    else
+                    {
+                        <ul>
+                            @foreach (var id in selectedIds)
+                            {
+                                var item = menuItems.First(m => m.Id == id);
+                                <li>@item.Name <span class="text-muted">@item.Price.ToString("C")</span></li>
+                            }
+                        </ul>
+                        <hr>
+                        <p>Subtotal: <strong>@subtotal.ToString("C")</strong></p>
+                        @if (discountPercent > 0)
+                        {
+                            <p class="text-success">Discount (@discountPercent%): <strong>-@discount.ToString("C")</strong></p>
+                        }
+                        <hr>
+                        <p class="fs-5">Total: <strong>@total.ToString("C")</strong></p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger mt-3">@errorMessage</div>
+    }
+
+    <button class="btn btn-primary mt-3" @onclick="PlaceOrder" disabled="@(selectedIds.Count == 0)">Place Order</button>
+    <a href="/orders" class="btn btn-secondary mt-3 ms-2">Cancel</a>
+}
+
+@if (toastMessage != null)
+{
+    <div class="position-fixed bottom-0 end-0 m-3 p-3 rounded text-white @toastClass" style="z-index: 9999; min-width: 250px;">
+        <div class="d-flex justify-content-between align-items-center">
+            <span>@toastMessage</span>
+            <button type="button" class="btn-close btn-close-white" @onclick="HideToast"></button>
+        </div>
+    </div>
+}
+
+@code {
+    private List<MenuItemModel>? menuItems;
+    private List<int> selectedIds = new();
+    private string? errorMessage;
+    private string? toastMessage;
+    private string toastClass = "bg-success";
+    private Timer? toastTimer;
+    private Dictionary<string, int> typeCounts = new()
+    {
+        ["Sandwich"] = 0,
+        ["Side"] = 0,
+        ["Drink"] = 0
+    };
+
+    private decimal subtotal => selectedIds.Sum(id => menuItems?.First(m => m.Id == id).Price ?? 0);
+    private int discountPercent => (typeCounts["Sandwich"] > 0 && typeCounts["Side"] > 0 && typeCounts["Drink"] > 0) ? 20 :
+                                   (typeCounts["Sandwich"] > 0 && typeCounts["Drink"] > 0) ? 15 :
+                                   (typeCounts["Sandwich"] > 0 && typeCounts["Side"] > 0) ? 10 : 0;
+    private decimal discount => subtotal * discountPercent / 100;
+    private decimal total => subtotal - discount;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            menuItems = await ApiClient.GetMenuAsync();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Failed to load menu: {ex.Message}";
+        }
+    }
+
+    private void ToggleItem(int id, string type, bool isSelected)
+    {
+        if (isSelected)
+        {
+            if (typeCounts[type] >= 1)
+            {
+                errorMessage = $"Cannot add more than 1 {type}.";
+                return;
+            }
+            selectedIds.Add(id);
+            typeCounts[type]++;
+        }
+        else
+        {
+            selectedIds.Remove(id);
+            typeCounts[type]--;
+        }
+        errorMessage = null;
+    }
+
+    private async Task PlaceOrder()
+    {
+        try
+        {
+            var order = new CreateOrderModel { MenuItemIds = selectedIds };
+            var result = await ApiClient.CreateOrderAsync(order);
+            if (result != null)
+            {
+                selectedIds.Clear();
+                typeCounts["Sandwich"] = 0;
+                typeCounts["Side"] = 0;
+                typeCounts["Drink"] = 0;
+                ShowToast("Order created successfully!", "bg-success");
+            }
+        }
+        catch (InvalidOperationException ex)
+        {
+            errorMessage = ex.Message;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"An unexpected error occurred: {ex.Message}";
+        }
+    }
+
+    private void ShowToast(string message, string cssClass)
+    {
+        toastMessage = message;
+        toastClass = cssClass;
+        StateHasChanged();
+        toastTimer?.Dispose();
+        toastTimer = new Timer(_ => { HideToast(); InvokeAsync(StateHasChanged); }, null, 3000, Timeout.Infinite);
+    }
+
+    private void HideToast()
+    {
+        toastMessage = null;
+        toastTimer?.Dispose();
+    }
+
+    public void Dispose()
+    {
+        toastTimer?.Dispose();
+    }
+}

@@ -1,0 +1,6 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>GoodHamburger.Domain</RootNamespace>
+    <AssemblyName>GoodHamburger.Domain</AssemblyName>
+  </PropertyGroup>
+</Project>
