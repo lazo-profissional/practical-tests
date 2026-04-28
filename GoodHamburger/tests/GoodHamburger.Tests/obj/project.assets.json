@@ -5148,8 +5148,8 @@
     },
     "GoodHamburger.API/1.0.0": {
       "type": "project",
-      "path": "../../src/GoodHamburger.API/GoodHamburger.Api.csproj",
-      "msbuildProject": "../../src/GoodHamburger.API/GoodHamburger.Api.csproj"
+      "path": "../../src/GoodHamburger.API/GoodHamburger.API.csproj",
+      "msbuildProject": "../../src/GoodHamburger.API/GoodHamburger.API.csproj"
     },
     "GoodHamburger.Application/1.0.0": {
       "type": "project",
@@ -5203,8 +5203,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.Api.csproj": {
-              "projectPath": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.Api.csproj"
+            "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.API.csproj": {
+              "projectPath": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.API.csproj"
             },
             "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.Domain\\GoodHamburger.Domain.csproj": {
               "projectPath": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.Domain\\GoodHamburger.Domain.csproj"
