@@ -1,6 +1,6 @@
 # GoodHamburger
 
-Um sistema de pedidos de hambúrguer pronto para produção, construído com **.NET 10**, seguindo uma **Arquitetura Limpa Simplificada**, com API RESTful e frontend em Blazor WebAssembly.
+Um sistema de pedidos de hambúrguer pronto para produção, construído com **.NET 8**, seguindo uma **Arquitetura Limpa Simplificada**, com API RESTful e frontend em Blazor WebAssembly.
 
 ---
 
@@ -114,7 +114,7 @@ GoodHamburger.sln
 
 ### Pré-requisitos
 
-* [.NET 10.0 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
+* [.NET 8.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 * Navegador moderno
 
 ### Executando a Aplicação
@@ -208,4 +208,4 @@ GoodHamburger.sln
 ## Licença
 
 Projeto para fins demonstrativos.
-**Construído com .NET 10 | Arquitetura Limpa Simplificada | Blazor WebAssembly | EF Core**
+**Construído com .NET 8 | Arquitetura Limpa Simplificada | Blazor WebAssembly | EF Core**

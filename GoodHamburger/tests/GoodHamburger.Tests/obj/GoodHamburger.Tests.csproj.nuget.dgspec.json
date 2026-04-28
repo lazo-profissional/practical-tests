@@ -4,12 +4,12 @@
     "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\tests\\GoodHamburger.Tests\\GoodHamburger.Tests.csproj": {}
   },
   "projects": {
-    "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.Api.csproj": {
+    "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.Api.csproj",
+        "projectUniqueName": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.API.csproj",
         "projectName": "GoodHamburger.API",
-        "projectPath": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.Api.csproj",
+        "projectPath": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.API.csproj",
         "packagesPath": "C:\\Users\\lucia\\.nuget\\packages\\",
         "outputPath": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\obj\\",
         "projectStyle": "PackageReference",
@@ -45,7 +45,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "10.0.200"
       },
       "frameworks": {
         "net8.0": {
@@ -83,7 +84,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.420/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.203/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
@@ -125,7 +126,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "10.0.200"
       },
       "frameworks": {
         "net8.0": {
@@ -152,7 +154,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.420/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.203/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
@@ -190,7 +192,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "10.0.200"
       },
       "frameworks": {
         "net8.0": {
@@ -211,7 +214,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.420/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.203/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
@@ -253,7 +256,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "10.0.200"
       },
       "frameworks": {
         "net8.0": {
@@ -284,7 +288,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.420/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.203/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
@@ -311,8 +315,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.Api.csproj": {
-                "projectPath": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.Api.csproj"
+              "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.API.csproj": {
+                "projectPath": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.API.csproj"
               },
               "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.Domain\\GoodHamburger.Domain.csproj": {
                 "projectPath": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.Domain\\GoodHamburger.Domain.csproj"
@@ -329,7 +333,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "10.0.200"
       },
       "frameworks": {
         "net8.0": {
@@ -370,7 +375,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.420/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.203/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

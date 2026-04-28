@@ -1,7 +1,7 @@
 @page "/orders"
 @using GoodHamburger.Blazor.Models
 @inject GoodHamburger.Blazor.Services.ApiClient ApiClient
-@inject NavigationManager Navigation
+@implements IDisposable
 
 <h1>Orders</h1>
 
@@ -11,7 +11,12 @@
 }
 else if (!orders.Any())
 {
-    <p>No orders yet. <a href="/orders/create">Create one</a>.</p>
+    <div class="text-center py-5">
+        <h1 class="display-1 text-muted">📦</h1>
+        <h3>No orders yet</h3>
+        <p class="text-muted">Create your first order to get started.</p>
+        <a href="/orders/create" class="btn btn-primary">Create Order</a>
+    </div>
 }
 else
 {
@@ -39,7 +44,7 @@ else
                     <td>@order.CreatedAt.ToString("g")</td>
                     <td>
                         <a href="/orders/edit/@order.Id" class="btn btn-sm btn-warning me-1">Edit</a>
-                        <button class="btn btn-sm btn-danger" @onclick="() => DeleteOrder(order.Id)">Delete</button>
+                        <button class="btn btn-sm btn-danger" @onclick="() => ConfirmDelete(order.Id)">Delete</button>
                     </td>
                 </tr>
             }
@@ -47,8 +52,44 @@ else
     </table>
 }
 
+@if (deleteId != null)
+{
+    <div class="modal d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Delete</h5>
+                    <button type="button" class="btn-close" @onclick="CancelDelete"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete order <strong>#@deleteId</strong>?</p>
+                    <p class="text-muted small">This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" @onclick="CancelDelete">Cancel</button>
+                    <button class="btn btn-danger" @onclick="ExecuteDelete">Yes, Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (toastMessage != null)
+{
+    <div class="position-fixed bottom-0 end-0 m-3 p-3 rounded text-white @toastClass" style="z-index: 9999; min-width: 250px;">
+        <div class="d-flex justify-content-between align-items-center">
+            <span>@toastMessage</span>
+            <button type="button" class="btn-close btn-close-white" @onclick="HideToast"></button>
+        </div>
+    </div>
+}
+
 @code {
     private List<OrderModel>? orders;
+    private int? deleteId;
+    private string? toastMessage;
+    private string toastClass = "bg-success";
+    private Timer? toastTimer;
 
     protected override async Task OnInitializedAsync()
     {
@@ -67,17 +108,51 @@ else
         }
     }
 
-    private async Task DeleteOrder(int id)
+    private void ConfirmDelete(int id)
     {
+        deleteId = id;
+    }
+
+    private void CancelDelete()
+    {
+        deleteId = null;
+    }
+
+    private async Task ExecuteDelete()
+    {
+        if (deleteId == null) return;
+
+        var idToDelete = deleteId.Value;
+        deleteId = null;
+
         try
         {
-            var success = await ApiClient.DeleteOrderAsync(id);
-            if (success)
-                await LoadOrders();
+            await ApiClient.DeleteOrderAsync(idToDelete);
+            ShowToast($"Order #{idToDelete} deleted!", "bg-success");
+            await LoadOrders();
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error deleting order: {ex.Message}");
+            ShowToast($"Error: {ex.Message}", "bg-danger");
         }
+    }
+
+    private void ShowToast(string message, string cssClass)
+    {
+        toastMessage = message;
+        toastClass = cssClass;
+        toastTimer?.Dispose();
+        toastTimer = new Timer(_ => { HideToast(); InvokeAsync(StateHasChanged); }, null, 3000, Timeout.Infinite);
+    }
+
+    private void HideToast()
+    {
+        toastMessage = null;
+        toastTimer?.Dispose();
+    }
+
+    public void Dispose()
+    {
+        toastTimer?.Dispose();
     }
 }
