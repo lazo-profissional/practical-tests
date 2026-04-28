@@ -4,12 +4,12 @@
     "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\tests\\GoodHamburger.Tests\\GoodHamburger.Tests.csproj": {}
   },
   "projects": {
-    "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.API.csproj": {
+    "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.API.csproj",
+        "projectUniqueName": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.Api.csproj",
         "projectName": "GoodHamburger.API",
-        "projectPath": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.API.csproj",
+        "projectPath": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.Api.csproj",
         "packagesPath": "C:\\Users\\lucia\\.nuget\\packages\\",
         "outputPath": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\obj\\",
         "projectStyle": "PackageReference",
@@ -311,8 +311,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.API.csproj": {
-                "projectPath": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.API.csproj"
+              "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.Api.csproj": {
+                "projectPath": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.Api.csproj"
               },
               "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.Domain\\GoodHamburger.Domain.csproj": {
                 "projectPath": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.Domain\\GoodHamburger.Domain.csproj"

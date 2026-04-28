@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\UI\\GoodHamburger.Blazor\\GoodHamburger.Blazor.csproj": {}
+    "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\ui\\GoodHamburger.Blazor\\GoodHamburger.Blazor.csproj": {}
   },
   "projects": {
-    "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\UI\\GoodHamburger.Blazor\\GoodHamburger.Blazor.csproj": {
+    "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\ui\\GoodHamburger.Blazor\\GoodHamburger.Blazor.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\UI\\GoodHamburger.Blazor\\GoodHamburger.Blazor.csproj",
+        "projectUniqueName": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\ui\\GoodHamburger.Blazor\\GoodHamburger.Blazor.csproj",
         "projectName": "GoodHamburger.Blazor",
-        "projectPath": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\UI\\GoodHamburger.Blazor\\GoodHamburger.Blazor.csproj",
+        "projectPath": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\ui\\GoodHamburger.Blazor\\GoodHamburger.Blazor.csproj",
         "packagesPath": "C:\\Users\\lucia\\.nuget\\packages\\",
-        "outputPath": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\UI\\GoodHamburger.Blazor\\obj\\",
+        "outputPath": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\ui\\GoodHamburger.Blazor\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\lucia\\AppData\\Roaming\\NuGet\\NuGet.Config"

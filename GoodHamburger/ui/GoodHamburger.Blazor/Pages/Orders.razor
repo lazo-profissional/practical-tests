@@ -32,14 +32,13 @@ else
             {
                 <tr>
                     <td>@order.Id</td>
-                    <td>
-                        @string.Join(", ", order.Items.Select(i => i.Name))
-                    </td>
+                    <td>@string.Join(", ", order.Items.Select(i => i.Name))</td>
                     <td>@order.Subtotal.ToString("C")</td>
                     <td>@order.Discount.ToString("C")</td>
                     <td><strong>@order.Total.ToString("C")</strong></td>
                     <td>@order.CreatedAt.ToString("g")</td>
                     <td>
+                        <a href="/orders/edit/@order.Id" class="btn btn-sm btn-warning me-1">Edit</a>
                         <button class="btn btn-sm btn-danger" @onclick="() => DeleteOrder(order.Id)">Delete</button>
                     </td>
                 </tr>

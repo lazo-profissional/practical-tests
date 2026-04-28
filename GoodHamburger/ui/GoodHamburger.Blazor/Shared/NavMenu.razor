@@ -1,11 +1,42 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+@inject NavigationManager Navigation
+@inject GoodHamburger.Blazor.Services.ApiClient ApiClient
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
     <div class="container">
-        <a class="navbar-brand" href="/">GoodHamburger</a>
-        <div class="navbar-nav">
-            <a class="nav-link" href="/">Home</a>
-            <a class="nav-link" href="/menu">Menu</a>
-            <a class="nav-link" href="/orders">Orders</a>
-            <a class="nav-link" href="/orders/create">New Order</a>
+        <a class="navbar-brand fw-bold" href="/">
+            🍔 GoodHamburger
+        </a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link @GetActiveClass("/")" href="/">Home</a>
+            <a class="nav-link @GetActiveClass("/menu")" href="/menu">Menu</a>
+            <a class="nav-link @GetActiveClass("/orders")" href="/orders">Orders</a>
+            <a class="nav-link @GetActiveClass("/orders/create")" href="/orders/create">New Order</a>
         </div>
+        @if (apiDown)
+        {
+            <span class="badge bg-danger ms-2">🔴 API Offline</span>
+        }
     </div>
 </nav>
+
+@code {
+    private bool apiDown;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await ApiClient.GetMenuAsync();
+        }
+        catch
+        {
+            apiDown = true;
+        }
+    }
+
+    private string GetActiveClass(string path)
+    {
+        var uri = Navigation?.Uri ?? "";
+        return uri.EndsWith(path, StringComparison.OrdinalIgnoreCase) ? "active" : "";
+    }
+}

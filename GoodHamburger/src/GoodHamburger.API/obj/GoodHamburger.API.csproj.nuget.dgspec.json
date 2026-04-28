@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.API.csproj": {}
+    "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.Api.csproj": {}
   },
   "projects": {
-    "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.API.csproj": {
+    "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.API.csproj",
+        "projectUniqueName": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.Api.csproj",
         "projectName": "GoodHamburger.API",
-        "projectPath": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.API.csproj",
+        "projectPath": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\GoodHamburger.Api.csproj",
         "packagesPath": "C:\\Users\\lucia\\.nuget\\packages\\",
         "outputPath": "D:\\source_repository\\projects\\practical-tests\\GoodHamburger\\src\\GoodHamburger.API\\obj\\",
         "projectStyle": "PackageReference",

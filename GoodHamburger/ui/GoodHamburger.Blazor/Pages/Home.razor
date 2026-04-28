@@ -1,10 +1,100 @@
 ﻿@page "/"
+@inject GoodHamburger.Blazor.Services.ApiClient ApiClient
 
-<h1>GoodHamburger</h1>
-<p>Welcome to GoodHamburger! Use the navigation to manage your orders.</p>
-
-<div class="mt-4">
-    <a href="/menu" class="btn btn-primary me-2">View Menu</a>
-    <a href="/orders" class="btn btn-secondary me-2">View Orders</a>
-    <a href="/orders/create" class="btn btn-success">Create Order</a>
+<div class="text-center py-5">
+    <h1 class="display-4 fw-bold">🍔 GoodHamburger</h1>
+    <p class="lead text-muted">Delicious burgers, simple ordering.</p>
 </div>
+
+@if (orders != null && orders.Any())
+{
+    <div class="row text-center mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="display-5 text-primary">@orders.Count</h2>
+                    <p class="text-muted">Total Orders</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="display-5 text-success">@orders.Sum(o => o.Total).ToString("C")</h2>
+                    <p class="text-muted">Total Revenue</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="display-5 text-warning">@orders.Average(o => o.Total).ToString("C")</h2>
+                    <p class="text-muted">Avg Order</p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <a href="/menu" class="text-decoration-none">
+            <div class="card shadow-sm text-center p-4 hover-card">
+                <div class="card-body">
+                    <h3>📋</h3>
+                    <h5>View Menu</h5>
+                    <p class="text-muted small">See our burgers, sides & drinks</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="/orders" class="text-decoration-none">
+            <div class="card shadow-sm text-center p-4 hover-card">
+                <div class="card-body">
+                    <h3>📦</h3>
+                    <h5>View Orders</h5>
+                    <p class="text-muted small">See all customer orders</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="/orders/create" class="text-decoration-none">
+            <div class="card shadow-sm text-center p-4 hover-card">
+                <div class="card-body">
+                    <h3>🛒</h3>
+                    <h5>Create Order</h5>
+                    <p class="text-muted small">Place a new order with discounts</p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="alert alert-danger mt-4" role="alert" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: @(apiError ? "block" : "none")">
+    ⚠️ Cannot connect to the server. Make sure the API is running.
+    <button type="button" class="btn-close ms-3" @onclick="() => apiError = false"></button>
+</div>
+
+@code {
+    private List<GoodHamburger.Blazor.Models.OrderModel>? orders;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            orders = await ApiClient.GetOrdersAsync();
+            using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(3) };
+            var response = await client.GetAsync("https://localhost:7001/api/menu");
+            apiError = !response.IsSuccessStatusCode;
+        }
+        catch
+        {
+            apiError = true;
+            orders = null;
+        }
+    }
+
+    private bool apiError;
+}
