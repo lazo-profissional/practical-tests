@@ -1,0 +1,84 @@
+@page "/orders"
+@using GoodHamburger.Blazor.Models
+@inject GoodHamburger.Blazor.Services.ApiClient ApiClient
+@inject NavigationManager Navigation
+
+<h1>Orders</h1>
+
+@if (orders == null)
+{
+    <p>Loading...</p>
+}
+else if (!orders.Any())
+{
+    <p>No orders yet. <a href="/orders/create">Create one</a>.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Items</th>
+                <th>Subtotal</th>
+                <th>Discount</th>
+                <th>Total</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in orders)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>
+                        @string.Join(", ", order.Items.Select(i => i.Name))
+                    </td>
+                    <td>@order.Subtotal.ToString("C")</td>
+                    <td>@order.Discount.ToString("C")</td>
+                    <td><strong>@order.Total.ToString("C")</strong></td>
+                    <td>@order.CreatedAt.ToString("g")</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" @onclick="() => DeleteOrder(order.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<OrderModel>? orders;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadOrders();
+    }
+
+    private async Task LoadOrders()
+    {
+        try
+        {
+            orders = await ApiClient.GetOrdersAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading orders: {ex.Message}");
+        }
+    }
+
+    private async Task DeleteOrder(int id)
+    {
+        try
+        {
+            var success = await ApiClient.DeleteOrderAsync(id);
+            if (success)
+                await LoadOrders();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error deleting order: {ex.Message}");
+        }
+    }
+}
