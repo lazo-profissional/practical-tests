@@ -1,6 +1,6 @@
 # GoodHamburger
 
-A production-ready hamburger ordering system built with **.NET 10**, following **Simplified Clean Architecture**, featuring a RESTful API and Blazor WebAssembly frontend.
+A production-ready hamburger ordering system built with **.NET 8**, following **Simplified Clean Architecture**, featuring a RESTful API and Blazor WebAssembly frontend.
 
 ---
 
@@ -91,7 +91,7 @@ GoodHamburger.sln
 
 ### Prerequisites
 
-* [.NET 10.0 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
+* [.NET 8.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 * Any modern browser
 
 ### Running the Application
@@ -185,4 +185,4 @@ GoodHamburger.sln
 
 ## License
 
-Demonstration project. **Built with .NET 10 | Simplified Clean Architecture.**
+Demonstration project. **Built with .NET 8 | Simplified Clean Architecture.**
